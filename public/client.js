@@ -5,7 +5,7 @@ const $ = s => document.querySelector(s);
 const canvas = $('#canvas');
 const ctx = canvas.getContext('2d');
 ctx.imageSmoothingEnabled = false;
-const SCALE = 2;                       // resoluciÃ³n interna x2 para textos nÃ­tidos
+const SCALE = 2;                       // resolución interna x2 para textos nítidos
 const W = canvas.width / SCALE, H = canvas.height / SCALE;
 const FONT = '"Press Start 2P", "Courier New", monospace';
 
@@ -54,7 +54,7 @@ const sfx = {
 };
 
 // ------------------------------------------------------------
-//  ConexiÃ³n WebSocket
+//  Conexión WebSocket
 // ------------------------------------------------------------
 function send(obj) {
   if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(obj));
@@ -108,7 +108,7 @@ function onWelcome(m) {
     try { saved = localStorage.getItem('8bits-name') || ''; } catch {}
     $('#nameInput').value = saved;
     $('#nameInput').focus();
-    // Si se ha caÃ­do la conexiÃ³n y ya tenÃ­a nombre, vuelve a entrar solo
+    // Si se ha caído la conexión y ya tenía nombre, vuelve a entrar solo
     if (saved && sessionStorage.getItem('8bits-auto')) send({ t: 'join', name: saved });
   }
 }
@@ -155,7 +155,7 @@ function onState(s) {
   prev = curr; prevT = currT;
   curr = s; currT = performance.now();
 
-  // Sonidos de la cuenta atrÃ¡s
+  // Sonidos de la cuenta atrás
   if (s.ph === 'countdown' && s.cd !== oldCd) sfx.count();
   if (s.ph === 'playing' && oldPhase === 'countdown') sfx.go();
 
@@ -196,7 +196,7 @@ function addFeed(killer, victim) {
   const li = document.createElement('li');
   const k = document.createElement('b'); k.textContent = killer;
   const v = document.createElement('b'); v.textContent = victim;
-  li.append(k, ' â–º ', v);
+  li.append(k, ' ► ', v);
   const feed = $('#feed');
   feed.prepend(li);
   while (feed.children.length > 6) feed.lastChild.remove();
@@ -207,8 +207,8 @@ function updateHud() {
   const inGame = m && m.ig;
   const hp = inGame ? Math.max(0, m.hp) : 0;
   const am = inGame ? m.am : 0;
-  $('#hudHp').textContent = inGame ? 'â™¥'.repeat(hp) + 'â™¡'.repeat(maxHp - hp) : '-';
-  $('#hudAmmo').textContent = inGame ? 'â–®'.repeat(am) + 'â–¯'.repeat(maxShots - am) : '-';
+  $('#hudHp').textContent = inGame ? '♥'.repeat(hp) + '♡'.repeat(maxHp - hp) : '-';
+  $('#hudAmmo').textContent = inGame ? '▮'.repeat(am) + '▯'.repeat(maxShots - am) : '-';
   $('#hudAmmoNum').textContent = inGame ? `${am}/${maxShots}` : '';
   $('#hudKills').textContent = inGame ? m.k : 0;
 }
@@ -236,7 +236,7 @@ function updateSide() {
     dot.style.background = p.c;
     name.append(dot, p.n);
     const info = document.createElement('span');
-    info.textContent = playing && p.ig ? `${'â™¥'.repeat(Math.max(0, p.hp))} ${p.k}â˜ ` : (playing ? 'ESPERA' : 'LISTO');
+    info.textContent = playing && p.ig ? `${'♥'.repeat(Math.max(0, p.hp))} ${p.k}☠` : (playing ? 'ESPERA' : 'LISTO');
     li.append(name, info);
     ul.appendChild(li);
   }
@@ -301,7 +301,7 @@ function shoot() {
   send({ t: 'shoot', a: aim });
 }
 
-// Enviar teclas y Ã¡ngulo como mucho 20 veces por segundo
+// Enviar teclas y ángulo como mucho 20 veces por segundo
 setInterval(() => {
   if (joined && inputDirty) {
     send({ t: 'in', ...keys, a: Math.round(aim * 100) / 100 });
@@ -414,7 +414,7 @@ function render() {
   const players = lerpPlayers();
   const m = players.find(p => p.id === myId);
 
-  // Ãngulo de apuntado
+  // Ángulo de apuntado
   if (m && mouse) {
     const a = Math.atan2(mouse.y - m.y, mouse.x - m.x);
     if (Math.abs(a - aim) > 0.02) { aim = a; inputDirty = true; }
@@ -436,7 +436,7 @@ function render() {
     ctx.setLineDash([]);
   }
 
-  // Jugadores caÃ­dos (lÃ¡pida)
+  // Jugadores caídos (lápida)
   for (const p of players) {
     if (!p.ig || p.al || curr.ph === 'lobby') continue;
     const x = Math.round(p.x), y = Math.round(p.y);
@@ -474,7 +474,7 @@ function render() {
 
       drawSprite(p.x, p.y, p.c, Math.cos(a) < 0, flash);
 
-      // Indicador de "tÃº"
+      // Indicador de "tú"
       if (p.id === myId) {
         ctx.fillStyle = '#ffec27';
         const bob = Math.floor(now / 250) % 2;
@@ -492,7 +492,7 @@ function render() {
     }
   }
 
-  // PartÃ­culas
+  // Partículas
   particles = particles.filter(pt => {
     pt.x += pt.vx; pt.y += pt.vy; pt.vx *= 0.92; pt.vy *= 0.92;
     ctx.fillStyle = pt.c;
@@ -526,33 +526,33 @@ function drawOverlay(m) {
     } else if (blink) {
       text('ESPERANDO A QUE EMPIECE LA PARTIDA...', W / 2, 180, 8, '#00e436');
     }
-    text(`${maxShots} TIROS  Â·  ${maxHp} VIDAS  Â·  SOLO QUEDA UNO`, W / 2, 230, 7, '#83769c');
+    text(`${maxShots} TIROS  ·  ${maxHp} VIDAS  ·  SOLO QUEDA UNO`, W / 2, 230, 7, '#83769c');
   } else if (ph === 'countdown') {
     dim();
     text(String(curr.cd), W / 2, H / 2 - 10, 48, '#ffec27');
-    text('Â¡PREPÃRATE!', W / 2, H / 2 + 40, 10, '#fff1e8');
+    text('¡PREPÁRATE!', W / 2, H / 2 + 40, 10, '#fff1e8');
   } else if (ph === 'playing') {
     const alive = curr.p.filter(p => p.ig && p.al).length;
     text(`VIVOS: ${alive}`, 8, 12, 8, '#fff1e8', 'left');
     if (curr.zt > 0) text(`ZONA EN ${curr.zt}s`, W - 8, 12, 8, '#ffa300', 'right');
-    else if (curr.z > 0) text('Â¡LA ZONA SE CIERRA!', W - 8, 12, 8, blink ? '#ff004d' : '#ffa300', 'right');
+    else if (curr.z > 0) text('¡LA ZONA SE CIERRA!', W - 8, 12, 8, blink ? '#ff004d' : '#ffa300', 'right');
 
     if (m && m.ig && !m.al) {
-      text('HAS CAÃDO', W / 2, H / 2 - 10, 20, '#ff004d');
+      text('HAS CAÍDO', W / 2, H / 2 - 10, 20, '#ff004d');
       text('MIRANDO LA PARTIDA...', W / 2, H / 2 + 20, 8, '#fff1e8');
     } else if (m && !m.ig) {
       text('PARTIDA EN CURSO - ENTRAS EN LA SIGUIENTE', W / 2, H - 14, 7, '#ffec27');
     } else if (m && m.al && m.am === 0 && blink) {
-      text('Â¡SIN MUNICIÃ“N! Â¡ESCONDETE!', W / 2, H - 14, 8, '#ff004d');
+      text('¡SIN MUNICIÓN! ¡ESCONDETE!', W / 2, H - 14, 8, '#ff004d');
     }
   } else if (ph === 'ended') {
     dim();
     if (curr.w) {
       const won = m && m.n === curr.w;
-      text(won ? 'Â¡HAS GANADO!' : 'GANADOR', W / 2, 110, won ? 24 : 16, '#ffec27');
+      text(won ? '¡HAS GANADO!' : 'GANADOR', W / 2, 110, won ? 24 : 16, '#ffec27');
       text(curr.w, W / 2, 160, 24, blink ? '#00e436' : '#fff1e8');
     } else {
-      text('Â¡EMPATE!', W / 2, 130, 24, '#ffec27');
+      text('¡EMPATE!', W / 2, 130, 24, '#ffec27');
     }
     text('VOLVIENDO A LA SALA...', W / 2, 240, 8, '#83769c');
   }
