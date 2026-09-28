@@ -1,4 +1,4 @@
-﻿# 8 BITS BATTLE
+# 8 BITS BATTLE
 
 Juego multijugador de navegador para el aula. El servidor Node.js conserva el estado de la partida y sincroniza a los jugadores mediante WebSockets.
 
@@ -14,7 +14,7 @@ Juego multijugador de navegador para el aula. El servidor Node.js conserva el es
 
 El frontend se publica en Vercel y el servidor Node/WebSocket en Render. Render mantiene una conexión WebSocket persistente para la partida; Vercel sirve la web pública.
 
-1. Importa este repositorio en Render como **Web Service**. Render detecta `render.yaml` y ejecuta `npm install` y `npm start`. Espera a que termine el primer despliegue y copia la URL del servicio, por ejemplo `https://8bits-battle-server.onrender.com`.
+1. Importa este repositorio en Render como **Web Service**. Render detecta `render.yaml` y ejecuta `npm install` y `npm start`. Espera a que termine el primer despliegue y copia la URL del servicio, por ejemplo `https://eightbits-battle-server.onrender.com`.
 2. Importa el mismo repositorio en Vercel. En **Settings → Environment Variables**, añade `GAME_SERVER_URL` con la URL HTTPS del servicio Render (sin `/` al final). Vuelve a desplegar para que el frontend incluya esa dirección.
 3. Comparte la URL pública de Vercel con la clase. El profesor debe abrirla primero; será el anfitrión. El resto entra a esa misma URL y escribe su nombre.
 
