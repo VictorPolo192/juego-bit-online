@@ -295,7 +295,8 @@ const wss = new WebSocketServer({ server, maxPayload: 1024 });
 
 wss.on('connection', (ws, req) => {
   const addr = req.socket.remoteAddress || '';
-  const isHost = hostId === null;
+  const requestedRole = new URL(req.url, 'http://localhost').searchParams.get('role');
+  const isHost = requestedRole === 'teacher' && hostId === null;
   const p = {
     id: nextId++, ws, name: '', joined: false, isHost,
     color: COLORS[colorIdx++ % COLORS.length],
@@ -346,11 +347,7 @@ wss.on('connection', (ws, req) => {
       events.push({ k: 'kill', killer: 'desconexiÃ³n', victim: p.name, id: p.id });
     }
     players.delete(p.id);
-    if (hostId === p.id) {
-      const replacementHost = players.values().next().value;
-      hostId = replacementHost ? replacementHost.id : null;
-      if (replacementHost) replacementHost.isHost = true;
-    }
+    if (hostId === p.id) hostId = null;
   });
 });
 

@@ -7,8 +7,8 @@ Juego multijugador de navegador para el aula. El servidor Node.js conserva el es
 1. Instala Node.js.
 2. En la carpeta del proyecto ejecuta `npm install`.
 3. Arranca con `npm run dev` (o abre `INICIAR.bat`).
-4. Abre `http://localhost:3000`. El primer navegador que se conecte será el profesor; abre esta página primero en el equipo del profesor.
-5. Los demás jugadores entran usando la misma dirección de red local del equipo del profesor.
+4. Abre `http://localhost:3000` en el equipo del profesor. La URL principal abre siempre el panel del profesor.
+5. Los demás jugadores entran con `http://IP_DEL_PROFESOR:3000/?mode=play`.
 
 ## Publicar para jugar desde cualquier red
 
@@ -16,7 +16,7 @@ El frontend se publica en Vercel y el servidor Node/WebSocket en Render. Render 
 
 1. Importa este repositorio en Render como **Web Service**. Render detecta `render.yaml` y ejecuta `npm install` y `npm start`. Espera a que termine el primer despliegue y copia la URL del servicio, por ejemplo `https://eightbits-battle-server.onrender.com`.
 2. Importa el mismo repositorio en Vercel. En **Settings → Environment Variables**, añade `GAME_SERVER_URL` con la URL HTTPS del servicio Render (sin `/` al final). Vuelve a desplegar para que el frontend incluya esa dirección.
-3. Comparte la URL pública de Vercel con la clase. El profesor debe abrirla primero; será el anfitrión. El resto entra a esa misma URL y escribe su nombre.
+3. El profesor abre la URL principal de Vercel. Desde el panel copia el enlace de alumno (`?mode=play`) y lo comparte con la clase.
 
 También puedes jugar directamente con la URL pública de Render; en ese caso el frontend y el servidor comparten origen y no hace falta configurar Vercel.
 

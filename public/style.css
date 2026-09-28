@@ -106,6 +106,10 @@ button.secondary { background: #065ab5; box-shadow: inset -4px -4px 0 #1d2b53, 4
 .help p { margin: 6px 0; }
 .help b { color: var(--accent); }
 
+.teacher-busy-box { width: min(420px, 100%); text-align: center; }
+.player-link, .addr #addrList a { color: var(--green); word-break: break-all; }
+.player-link { display: inline-block; margin-top: 12px; }
+
 /* ---- Juego ---- */
 .layout {
   display: flex;
@@ -147,7 +151,8 @@ canvas {
   width: 100%;
 }
 
-.addr #addrList div {
+.addr #addrList a {
+  display: block;
   color: var(--green);
   font-size: 13px;
   word-break: break-all;

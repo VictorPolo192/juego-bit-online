@@ -10,6 +10,7 @@ const W = canvas.width / SCALE, H = canvas.height / SCALE;
 const FONT = '"Press Start 2P", "Courier New", monospace';
 
 let ws, myId = null, isHost = false, joined = false;
+const isPlayerView = new URLSearchParams(location.search).get('mode') === 'play';
 let TILE = 16, maxShots = 10, maxHp = 3;
 let mapLayer = null;                    // mapa pre-dibujado
 let prev = null, curr = null, prevT = 0, currT = 0;
@@ -61,8 +62,9 @@ function send(obj) {
 
 function connect() {
   const serverUrl = window.GAME_SERVER_URL || location.origin;
-  const socketUrl = serverUrl.replace(/^http/, 'ws');
-  ws = new WebSocket(socketUrl);
+  const socketUrl = new URL(serverUrl.replace(/^http/, 'ws'));
+  if (!isPlayerView) socketUrl.searchParams.set('role', 'teacher');
+  ws = new WebSocket(socketUrl.toString());
   ws.onopen = () => { $('#offline').hidden = true; };
   ws.onmessage = e => {
     const m = JSON.parse(e.data);
@@ -88,13 +90,18 @@ function onWelcome(m) {
 
   const list = $('#addrList');
   list.replaceChildren();
-  const address = document.createElement('div');
-  address.textContent = location.host;
+  const address = document.createElement('a');
+  address.href = `${location.origin}/?mode=play`;
+  address.target = '_blank';
+  address.rel = 'noopener';
+  address.textContent = `${location.host}/?mode=play`;
   list.appendChild(address);
 
   $('#hostPanel').hidden = !isHost;
-  if (isHost) {
+  if (!isPlayerView && isHost) {
     showScreen('game');
+  } else if (!isPlayerView) {
+    showScreen('teacherBusy');
   } else {
     showScreen('join');
     let saved = '';
@@ -119,6 +126,7 @@ function onJoined(m) {
 function showScreen(id) {
   $('#join').hidden = id !== 'join';
   $('#game').hidden = id !== 'game';
+  $('#teacherBusy').hidden = id !== 'teacherBusy';
 }
 
 $('#joinForm').addEventListener('submit', e => {
